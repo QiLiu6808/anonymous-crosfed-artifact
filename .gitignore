@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+
+data/
+logs/
+checkpoints/
+*.pt
+*.pth
+
+contracts/build/
+configs/generated/
+third_party/
+figures/*.png
+artifacts/
+
+# Keep small, curated result.json files; omit transient event streams and logs.
+runs/**/events*.jsonl
+runs/**/checkpoint.pt

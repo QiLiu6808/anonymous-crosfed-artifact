@@ -1,0 +1,9 @@
+base_config: configs/paper/cifar10_crypto_5c_3a_100r.yaml
+sweep_name: R008_cifar10_client_sweep
+parameters:
+  clients: [2, 4, 6, 8, 10]
+fixed:
+  aggregators: 3
+  threshold: 2
+  committee: [1, 2]
+  dlog_bound: 80000

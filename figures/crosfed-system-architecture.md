@@ -1,0 +1,47 @@
+# CrosFed 复现系统架构
+
+主路径从实验配置、机构本地训练和加密开始，经机构链、relay、多聚合器阈值解密、聚合器链返回全局模型；尾部是独立的实验取证和验证层。
+
+```mermaid
+%%{init: {"theme": "base", "flowchart": {"curve": "basis", "nodeSpacing": 38, "rankSpacing": 42}}}%%
+flowchart TB
+    CFG["Experiment configuration<br/>seed · dataset · n clients · s aggregators · threshold t"]
+    ORCH["Round orchestrator<br/>state machine · committee freeze · checkpoints"]
+    KGC["Honest KGC<br/>Setup · client keys · round/function share keys"]
+    CLIENT["Institution workers × n<br/>local train → fixed-point encode → tMCFE Encrypt"]
+    ICHAIN["Institution chains<br/>Algorithm 1: signed ciphertext commit"]
+    RELAY_OUT["Relay chain<br/>Algorithm 2: route query and verify response"]
+    AGG["Aggregator workers × s<br/>KGC key dk_j,L,Y,t · verify n ciphertexts · ShareDecrypt with fixed S"]
+    ACHAIN["Aggregator chains<br/>Algorithm 3: signed partial-result commit"]
+    RELAY_BACK["Relay chain<br/>Algorithm 4: route query and verify response"]
+    COMBINE["Institution CombineDecrypt<br/>threshold check → bounded dlog → model decode"]
+    EVAL["Global model update<br/>load state → accuracy/loss → next round"]
+    METRICS["Evidence recorder<br/>phase time · wire bytes · on-chain bytes · gas"]
+    ARTIFACTS["Auditable outputs<br/>JSONL · CSV · receipts · checkpoints · paper figures"]
+    TESTS["Verification suite<br/>plaintext oracle · t versus t-1 · replay · tamper · resume"]
+
+    CFG --> ORCH
+    ORCH --> KGC
+    KGC -->|"client key ek_i"| CLIENT
+    KGC -.-> AGG
+    CLIENT -->|"EncryptedLocalUpdate"| ICHAIN
+    ICHAIN --> RELAY_OUT
+    RELAY_OUT --> AGG
+    AGG -->|"PartialGlobalUpdate"| ACHAIN
+    ACHAIN --> RELAY_BACK
+    RELAY_BACK --> COMBINE
+    COMBINE --> EVAL
+    EVAL -.->|"round L + 1"| ORCH
+    EVAL --> METRICS --> ARTIFACTS --> TESTS
+
+    classDef control fill:#EDE9FE,stroke:#7C3AED,color:#111827,stroke-width:2px;
+    classDef client fill:#ECFDF5,stroke:#10B981,color:#111827,stroke-width:2px;
+    classDef crypto fill:#EFF6FF,stroke:#2563EB,color:#111827,stroke-width:2px;
+    classDef chain fill:#FFF7ED,stroke:#EA580C,color:#111827,stroke-width:2px;
+    classDef evidence fill:#F3F4F6,stroke:#4B5563,color:#111827,stroke-width:2px;
+    class CFG,ORCH,KGC control;
+    class CLIENT,EVAL client;
+    class AGG,COMBINE crypto;
+    class ICHAIN,RELAY_OUT,ACHAIN,RELAY_BACK chain;
+    class METRICS,ARTIFACTS,TESTS evidence;
+```

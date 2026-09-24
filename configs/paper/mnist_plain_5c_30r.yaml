@@ -1,0 +1,21 @@
+run_id: R004_mnist_plain_5c_30r_candidate_b
+seed: 20260922
+mode: plain
+dataset: mnist
+data_dir: data
+model: paper_candidate
+candidate: b
+clients: 5
+rounds: 30
+local_epochs: 1
+batch_size: 64
+optimizer: sgd
+learning_rate: 0.05
+momentum: 0.9
+weight_decay: 0.0
+lr_schedule:
+  type: constant
+train_samples: 60000
+test_samples: 10000
+normalize: true
+device: cuda

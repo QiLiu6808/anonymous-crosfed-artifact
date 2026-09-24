@@ -1,0 +1,40 @@
+institution_chain:
+  chain_id: crosfed-institution
+  contract: EncryptedUpdateRegistry
+  submit_method: submitEncryptedLocalUpdate
+  query_method: getEncryptedLocalUpdates
+
+aggregator_chain:
+  chain_id: crosfed-aggregator
+  contract: PartialUpdateRegistry
+  submit_method: submitPartialGlobalUpdate
+  query_method: getPartialGlobalUpdates
+
+relay:
+  chain_id: crosfed-relay
+  mode: signed-query
+  encrypted_update_contract: EncryptedUpdateRelay
+  partial_update_contract: PartialUpdateRelay
+
+sdk_bridge:
+  command:
+    - python
+    - scripts/chainmaker_cmc_bridge.py
+    - --config
+    - chainmaker/config/example.yaml
+  timeout_seconds: 120
+
+cmc:
+  executable: /path/to/chainmaker-go/tools/cmc/cmc
+  invoke_action: invoke
+  query_action: get
+  sync_result: true
+  sdk_conf_by_chain:
+    crosfed-institution: /path/to/institution/sdk_config.yml
+    crosfed-aggregator: /path/to/aggregator/sdk_config.yml
+    crosfed-relay: /path/to/relay/sdk_config.yml
+  abi_file_by_contract:
+    EncryptedUpdateRegistry: contracts/build/EncryptedUpdateRegistry.abi
+    PartialUpdateRegistry: contracts/build/PartialUpdateRegistry.abi
+    EncryptedUpdateRelay: contracts/build/EncryptedUpdateRelay.abi
+    PartialUpdateRelay: contracts/build/PartialUpdateRelay.abi

@@ -1,0 +1,12 @@
+run_id: R003_plain_mnist_sanity
+seed: 20260922
+data_dir: data
+clients: 2
+rounds: 1
+local_epochs: 1
+batch_size: 64
+learning_rate: 0.05
+train_samples: 2048
+test_samples: 1024
+device: cuda
+

@@ -1,0 +1,46 @@
+{
+  "run_id": "R001_R002_crypto_sanity",
+  "status": "passed",
+  "group": "SS512",
+  "expected": [
+    3,
+    7,
+    5,
+    1
+  ],
+  "recovered": [
+    3,
+    7,
+    5,
+    1
+  ],
+  "exact_match": true,
+  "negative_checks": {
+    "t_minus_one": {
+      "rejected": true,
+      "reason": "insufficient partial shares"
+    },
+    "duplicate_signer": {
+      "rejected": true,
+      "reason": "duplicate aggregator share"
+    },
+    "tampered_numerator": {
+      "rejected": true,
+      "reason": "inconsistent shared numerator"
+    },
+    "replay": {
+      "rejected": true,
+      "reason": "round mismatch or replay detected"
+    }
+  },
+  "ciphertext_bytes_per_client": [
+    720,
+    720,
+    720
+  ],
+  "partial_share_bytes": [
+    1800,
+    1800
+  ],
+  "wall_seconds": 0.21728229202562943
+}

@@ -1,0 +1,24 @@
+{
+  "run_id": "R003_plain_mnist_sanity",
+  "status": "passed",
+  "device": "cuda",
+  "model_parameters": 9098,
+  "initial": {
+    "loss": 2.301792800426483,
+    "accuracy": 0.1064453125,
+    "samples": 1024
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "local_loss": [
+        2.207575350999832,
+        2.1858140975236893
+      ],
+      "loss": 1.7136979699134827,
+      "accuracy": 0.6298828125,
+      "samples": 1024
+    }
+  ],
+  "wall_seconds": 0.7801194110070355
+}

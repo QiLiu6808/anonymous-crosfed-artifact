@@ -1,0 +1,19 @@
+run_id: R001_R002_crypto_sanity
+seed: 20260922
+group: SS512
+clients: 3
+aggregators: 3
+threshold: 2
+committee: [1, 3]
+dimension: 4
+round_id: 7
+dlog_bound: 128
+vectors:
+  - [3, -2, 5, 1]
+  - [-1, 4, 2, -3]
+  - [2, 1, -4, 6]
+weights:
+  - [1, 1, 1, 1]
+  - [2, 2, 2, 2]
+  - [1, 1, 1, 1]
+

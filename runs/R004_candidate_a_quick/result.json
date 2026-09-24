@@ -1,0 +1,26 @@
+{
+  "run_id": "R004_candidate_a_quick",
+  "status": "passed",
+  "device": "cpu",
+  "model": "paper_candidate",
+  "candidate": "a",
+  "model_parameters": 19518,
+  "initial": {
+    "loss": 2.304712012410164,
+    "accuracy": 0.1279296875,
+    "samples": 1024
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "local_loss": [
+        2.028035119175911,
+        1.9706313386559486
+      ],
+      "loss": 1.4228572696447372,
+      "accuracy": 0.4677734375,
+      "samples": 1024
+    }
+  ],
+  "wall_seconds": 0.8424017879879102
+}

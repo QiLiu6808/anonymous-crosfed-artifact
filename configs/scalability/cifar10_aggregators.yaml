@@ -1,0 +1,7 @@
+base_config: configs/paper/cifar10_crypto_5c_3a_100r.yaml
+sweep_name: R009_cifar10_aggregator_sweep
+parameters:
+  aggregators: [1, 2, 3, 4, 5]
+fixed:
+  clients: 5
+
