@@ -1,0 +1,28 @@
+run_id: R010c_cifar10_hybridalpha_5c_100r
+seed: 20260922
+mode: hybridalpha
+dataset: cifar10
+data_dir: data
+model: paper_candidate
+clients: 5
+rounds: 100
+local_epochs: 1
+batch_size: 128
+optimizer: sgd
+learning_rate: 0.05
+momentum: 0.9
+weight_decay: 0.0005
+lr_schedule:
+  type: step
+  milestones: [50, 75]
+  gamma: 0.1
+train_samples: 50000
+test_samples: 10000
+normalize: true
+augment: true
+device: cuda
+group: SS512
+codec:
+  scale: 1000
+  clip: 8.0
+dlog_bound: 40000

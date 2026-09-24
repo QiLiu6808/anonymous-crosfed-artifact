@@ -1,0 +1,26 @@
+run_id: R010a_mnist_hybridalpha_5c_30r_candidate_b
+seed: 20260922
+mode: hybridalpha
+dataset: mnist
+data_dir: data
+model: paper_candidate
+candidate: b
+clients: 5
+rounds: 30
+local_epochs: 1
+batch_size: 64
+optimizer: sgd
+learning_rate: 0.05
+momentum: 0.9
+weight_decay: 0.0
+lr_schedule:
+  type: constant
+train_samples: 60000
+test_samples: 10000
+normalize: true
+device: cuda
+group: SS512
+codec:
+  scale: 1000
+  clip: 8.0
+dlog_bound: 40000

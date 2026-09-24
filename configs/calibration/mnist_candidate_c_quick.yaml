@@ -1,0 +1,15 @@
+run_id: R004_candidate_c_quick
+seed: 20260922
+data_dir: data
+model: paper_candidate
+candidate: c
+clients: 2
+rounds: 1
+local_epochs: 1
+batch_size: 64
+learning_rate: 0.05
+train_samples: 2048
+test_samples: 1024
+normalize: true
+device: cpu
+

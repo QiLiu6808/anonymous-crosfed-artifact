@@ -1,0 +1,7 @@
+base_config: configs/paper/mnist_crypto_5c_3a_30r.yaml
+sweep_name: R009_mnist_aggregator_sweep
+parameters:
+  aggregators: [1, 2, 3, 4, 5]
+fixed:
+  clients: 5
+
