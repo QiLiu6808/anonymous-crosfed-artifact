@@ -5,6 +5,11 @@ Privacy-Preserving Cross-Chain Federated Learning with Threshold Aggregation*.
 All generated source, configuration, documentation, and result files live in
 this `CrosFed` directory.
 
+The repository uses a standard `src/` layout. Reusable implementation lives in
+`src/crosfed`; `scripts/*.py` are backward-compatible wrappers only. See
+[`docs/CODE_STRUCTURE.md`](docs/CODE_STRUCTURE.md) for module boundaries and a
+change-location guide.
+
 ## What is implemented
 
 - Exact-integer vector tMCFE reference path over Charm SS512: setup, client-key
@@ -22,7 +27,9 @@ this `CrosFed` directory.
 - In-memory ledger/relay backend, ChainMaker subprocess adapter, CMC bridge, and
   four Solidity contracts corresponding to the paper's upload/download flows.
 - JSONL phase metrics, incremental result files, runtime metadata, and split
-  manifests.
+  manifests, raw dataset-content hashes, and fixed-point clipping diagnostics.
+- Adversarial protocol sanity CLI, three-seed repetition matrices, and a full
+  two-direction ChainMaker upload/query/relay/fulfill driver.
 
 See `docs/FIDELITY_AUDIT.md` before interpreting any number as a paper result.
 
@@ -39,12 +46,18 @@ the PBC shared-library path required by Charm. Override `CONDA_ROOT` or
 `CROSFED_PBC_LIB` when needed. SS512 emits an approximately 80-bit security
 warning; it is retained solely because the manuscript specifies it.
 
+Editable installation exposes stable commands such as `crosfed-train`,
+`crosfed-sweep`, `crosfed-security`, `crosfed-summarize`, and the
+`crosfed-chainmaker-*` tools. Every Python entry point can also be invoked as a
+module, for example `python -m crosfed.cli.train`. Commands under `scripts/`
+remain supported for existing reproduction instructions.
+
 ## Unified runner
 
 Plain MNIST:
 
 ```bash
-python scripts/run_federated.py \
+crosfed-train \
   --config configs/paper/mnist_plain_5c_30r.yaml \
   --output runs/R004_mnist_plain_5c_30r_candidate_b/result.json
 ```
@@ -52,7 +65,7 @@ python scripts/run_federated.py \
 One-round encrypted gate:
 
 ```bash
-python scripts/run_federated.py \
+crosfed-train \
   --config configs/paper/mnist_crypto_5c_3a_1r.yaml \
   --output runs/R006_mnist_crypto_5c_3a_1r_candidate_b/result.json
 ```
@@ -72,9 +85,36 @@ bash scripts/launch_remote.sh crosfed_r006 \
 Generate, but do not execute, a sweep:
 
 ```bash
-python scripts/run_sweep.py \
+crosfed-sweep \
   --sweep configs/scalability/mnist_clients.yaml \
   --output-root runs --dry-run
+```
+
+Aggregate every completed run into paper-oriented JSON/CSV statistics:
+
+```bash
+crosfed-summarize \
+  --results "runs/**/result.json" \
+  --output-prefix runs/summary/paper_metrics
+```
+
+Runs are grouped by dataset, method, model, client count, aggregator count, and
+threshold. The summary reports mean and sample standard deviation across seeds;
+missing paper-level evidence remains empty instead of being inferred.
+
+Generate a three-seed batch without executing it:
+
+```bash
+crosfed-sweep \
+  --sweep configs/repetitions/mnist_crypto.yaml \
+  --output-root runs --dry-run
+```
+
+Run protocol attack/replay/tamper checks (requires the Charm environment):
+
+```bash
+crosfed-security \
+  --output runs/R020_adversarial_sanity/result.json
 ```
 
 ## ChainMaker
@@ -85,10 +125,28 @@ normalized JSON envelopes for contract queries. CMC/EVM return-value encoding is
 version-specific, so the supplied bridge deliberately fails instead of guessing
 when it cannot locate normalized `envelopes`.
 
+Generate a concrete three-chain config and deploy each contract to its intended
+chain:
+
+```bash
+crosfed-chainmaker-config \
+  --cmc /opt/chainmaker/cmc \
+  --institution-sdk /etc/chainmaker/institution.yml \
+  --aggregator-sdk /etc/chainmaker/aggregator.yml \
+  --relay-sdk /etc/chainmaker/relay.yml \
+  --output chainmaker/config/deployment.yaml --check-paths
+bash scripts/deploy_chainmaker_multichain.sh /opt/chainmaker/cmc \
+  /etc/chainmaker/institution.yml /etc/chainmaker/aggregator.yml \
+  /etc/chainmaker/relay.yml
+crosfed-chainmaker-e2e \
+  --config chainmaker/config/deployment.yaml --payload-bytes 1024 \
+  --output runs/R012_chainmaker_e2e/result.json
+```
+
 Contract microbenchmark:
 
 ```bash
-python scripts/run_contract_microbench.py \
+crosfed-contract-bench \
   --config chainmaker/config/example.yaml \
   --payload-bytes 1024 --repetitions 5 \
   --output runs/R011_contract_microbench/result.json

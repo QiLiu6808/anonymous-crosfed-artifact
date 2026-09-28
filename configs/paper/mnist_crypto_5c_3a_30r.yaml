@@ -8,7 +8,7 @@ candidate: b
 clients: 5
 aggregators: 3
 threshold: 2
-committee: [1, 2]
+committee: [1, 2, 3]
 rounds: 30
 local_epochs: 1
 batch_size: 64

@@ -13,6 +13,12 @@ def validate_experiment_config(config: Mapping[str, Any]) -> None:
         raise ValueError(f"missing experiment config fields: {', '.join(missing)}")
     if config["mode"] not in {"plain", "crypto", "hybridalpha", "privldfl"}:
         raise ValueError("unsupported experiment mode")
+    if config["mode"] in {"hybridalpha", "privldfl"} and config.get(
+        "allow_reconstructed_baseline"
+    ) is not True:
+        raise ValueError(
+            "reconstructed baselines require allow_reconstructed_baseline: true"
+        )
     if config["dataset"] not in {"mnist", "cifar10"}:
         raise ValueError("unsupported dataset")
     for field in ("clients", "rounds", "local_epochs", "batch_size"):
@@ -29,7 +35,10 @@ def validate_experiment_config(config: Mapping[str, Any]) -> None:
         threshold = int(config["threshold"])
         if not 1 <= threshold <= aggregators:
             raise ValueError("threshold must be in [1, aggregators]")
-        committee = tuple(int(value) for value in config.get("committee", range(1, threshold + 1)))
+        committee = tuple(
+            int(value)
+            for value in config.get("committee", range(1, aggregators + 1))
+        )
         if len(set(committee)) != len(committee) or len(committee) < threshold:
             raise ValueError("committee must contain at least threshold unique identities")
         if any(value < 1 or value > aggregators for value in committee):

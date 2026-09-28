@@ -11,6 +11,7 @@ import torch
 from crosfed.crypto import (
     FixedPointCodec,
     HMACSignatureProvider,
+    QuantizationDiagnostics,
     ThresholdMCFE,
     function_digest,
 )
@@ -42,6 +43,7 @@ class SecureAggregationResult:
     aggregator_wire_bytes_by_id: tuple[int, ...]
     client_crypto_bytes_by_id: tuple[int, ...]
     aggregator_crypto_bytes_by_id: tuple[int, ...]
+    quantization_diagnostics_by_client: tuple[QuantizationDiagnostics, ...]
     phase: RoundPhase
 
 
@@ -130,7 +132,7 @@ class SecureRoundOrchestrator:
         if len(states) != self.clients or len(sample_counts) != self.clients:
             raise ValueError("one state and sample count are required per client")
         active_committee = tuple(
-            sorted(committee or range(1, self.threshold + 1))
+            sorted(committee or range(1, self.aggregators + 1))
         )
         if len(active_committee) < self.threshold:
             raise ValueError("committee smaller than threshold")
@@ -146,10 +148,21 @@ class SecureRoundOrchestrator:
                 raise ValueError("client model structure differs from template")
             vectors.append(vector)
 
-        with PhaseTimer(
-            self.recorder, self.experiment_id, "encode", "institutions", round_id
-        ):
-            encoded = [self.codec.encode(vector.tolist()) for vector in vectors]
+        encoded = []
+        quantization_diagnostics = []
+        for client_id, vector in enumerate(vectors, start=1):
+            with PhaseTimer(
+                self.recorder,
+                self.experiment_id,
+                "encode",
+                f"institution:{client_id}",
+                round_id,
+            ):
+                encoded_vector, diagnostics = self.codec.encode_with_diagnostics(
+                    vector.tolist()
+                )
+                encoded.append(encoded_vector)
+                quantization_diagnostics.append(diagnostics)
         machine.advance(RoundPhase.ENCODED)
 
         integer_weights = _reduced_integer_weights(sample_counts)
@@ -316,5 +329,6 @@ class SecureRoundOrchestrator:
             aggregator_wire_bytes_by_id=tuple(aggregator_wire_by_id),
             client_crypto_bytes_by_id=tuple(client_crypto_by_id),
             aggregator_crypto_bytes_by_id=tuple(aggregator_crypto_by_id),
+            quantization_diagnostics_by_client=tuple(quantization_diagnostics),
             phase=machine.phase,
         )

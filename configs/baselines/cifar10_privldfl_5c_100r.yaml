@@ -1,6 +1,7 @@
 run_id: R010d_cifar10_privldfl_5c_100r
 seed: 20260922
 mode: privldfl
+allow_reconstructed_baseline: true
 dataset: cifar10
 data_dir: data
 model: paper_candidate

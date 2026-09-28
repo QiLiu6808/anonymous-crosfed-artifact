@@ -1,0 +1,4 @@
+base_config: configs/paper/mnist_plain_5c_30r.yaml
+sweep_name: R030_mnist_plain_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

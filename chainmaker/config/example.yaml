@@ -19,7 +19,8 @@ relay:
 sdk_bridge:
   command:
     - python
-    - scripts/chainmaker_cmc_bridge.py
+    - -m
+    - crosfed.cli.chainmaker_bridge
     - --config
     - chainmaker/config/example.yaml
   timeout_seconds: 120

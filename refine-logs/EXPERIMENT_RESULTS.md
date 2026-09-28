@@ -1,4 +1,0 @@
-# Current Initial Results
-
-See [EXPERIMENT_RESULTS_20260922.md](EXPERIMENT_RESULTS_20260922.md).
-

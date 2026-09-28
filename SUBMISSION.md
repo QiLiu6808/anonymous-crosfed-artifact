@@ -20,13 +20,13 @@ calibrated assumptions are documented in `docs/FIDELITY_AUDIT.md`.
 ```bash
 python -m pip install -e '.[ml,test]'
 pytest -q
-python scripts/run_crypto_sanity.py --config configs/sanity_crypto.yaml
+crosfed-crypto-sanity --config configs/sanity_crypto.yaml
 ```
 
 For the full one-round encrypted MNIST gate:
 
 ```bash
-python scripts/run_federated.py \
+crosfed-train \
   --config configs/paper/mnist_crypto_5c_3a_1r.yaml \
   --output runs/R006_mnist_crypto_5c_3a_1r_candidate_b/result.json
 ```

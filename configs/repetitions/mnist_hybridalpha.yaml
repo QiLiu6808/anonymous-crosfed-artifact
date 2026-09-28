@@ -1,0 +1,4 @@
+base_config: configs/baselines/mnist_hybridalpha_5c_30r.yaml
+sweep_name: R034_mnist_hybridalpha_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

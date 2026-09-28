@@ -1,0 +1,4 @@
+base_config: configs/baselines/cifar10_privldfl_5c_100r.yaml
+sweep_name: R037_cifar10_privldfl_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

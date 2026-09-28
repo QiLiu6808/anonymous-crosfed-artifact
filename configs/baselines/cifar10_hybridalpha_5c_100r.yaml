@@ -1,6 +1,7 @@
 run_id: R010c_cifar10_hybridalpha_5c_100r
 seed: 20260922
 mode: hybridalpha
+allow_reconstructed_baseline: true
 dataset: cifar10
 data_dir: data
 model: paper_candidate

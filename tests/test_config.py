@@ -24,3 +24,11 @@ def test_crypto_committee_is_validated() -> None:
     }
     with pytest.raises(ValueError, match="out of range"):
         validate_experiment_config(config)
+
+
+def test_reconstructed_baseline_requires_explicit_opt_in() -> None:
+    config = {**base_config(), "mode": "privldfl"}
+    with pytest.raises(ValueError, match="allow_reconstructed_baseline"):
+        validate_experiment_config(config)
+    config["allow_reconstructed_baseline"] = True
+    validate_experiment_config(config)

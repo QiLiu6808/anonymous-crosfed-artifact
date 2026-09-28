@@ -1,0 +1,4 @@
+base_config: configs/paper/cifar10_plain_5c_100r.yaml
+sweep_name: R032_cifar10_plain_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

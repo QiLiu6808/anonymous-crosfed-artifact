@@ -13,8 +13,24 @@ checkpoints/
 contracts/build/
 configs/generated/
 third_party/
-figures/*.png
 artifacts/
+
+# Local research history and generated evidence are intentionally excluded from
+# the anonymous source artifact. Experiments recreate runs/ from configs.
+figures/
+refine-logs/
+runs/
+docs/ARCHITECTURE.md
+docs/IMPLEMENTATION_STATUS*.md
+docs/*_20??????.md
+
+# Superseded local convenience scripts; the generic and multi-chain entry
+# points under scripts/ remain part of the artifact.
+scripts/deploy_chainmaker_contracts.sh
+scripts/launch_r004_immediate.sh
+scripts/launch_r004_remote.sh
+scripts/run_plain_mnist.py
+scripts/run_when_gpu_free.py
 
 # Keep small, curated result.json files; omit transient event streams and logs.
 runs/**/events*.jsonl

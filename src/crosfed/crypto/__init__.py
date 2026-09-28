@@ -1,4 +1,4 @@
-from .codec import FixedPointCodec
+from .codec import FixedPointCodec, QuantizationDiagnostics
 from .signatures import HMACSignatureProvider
 from .tmcfe import (
     Ciphertext,
@@ -13,6 +13,7 @@ from .tmcfe import (
 __all__ = [
     "Ciphertext",
     "FixedPointCodec",
+    "QuantizationDiagnostics",
     "FunctionalShareKey",
     "HMACSignatureProvider",
     "PartialShare",

@@ -1,5 +1,7 @@
 run_id: R004_candidate_a_quick
 seed: 20260922
+mode: plain
+dataset: mnist
 data_dir: data
 model: paper_candidate
 candidate: a
@@ -12,4 +14,3 @@ train_samples: 2048
 test_samples: 1024
 normalize: true
 device: cpu
-

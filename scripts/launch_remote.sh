@@ -17,7 +17,7 @@ mkdir -p "$(dirname "$output_path")" logs
 
 # screen owns the long-lived shell. remote_env.sh activates the declared conda
 # environment and the Charm/PBC runtime before Python starts.
-screen -dmS "$session_name" bash -lc "cd '$project_dir' && source ./remote_env.sh && CUDA_VISIBLE_DEVICES=0 python scripts/run_federated.py --config '$config_path' --output '$output_path' 2>&1 | tee '$log_path'"
+screen -dmS "$session_name" bash -lc "cd '$project_dir' && source ./remote_env.sh && CUDA_VISIBLE_DEVICES=0 python -m crosfed.cli.train --config '$config_path' --output '$output_path' 2>&1 | tee '$log_path'"
 
 echo "started screen session: $session_name"
 echo "log: $project_dir/$log_path"

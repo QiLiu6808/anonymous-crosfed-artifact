@@ -235,8 +235,6 @@ class ThresholdMCFE:
             raise TMCFEError("committee contains duplicate aggregators")
         if key.aggregator_id not in committee_tuple or len(committee_tuple) < key.threshold:
             raise TMCFEError("invalid threshold committee")
-        lagrange = self._lagrange_at_zero(key.aggregator_id, committee_tuple)
-
         numerator = []
         for z in range(pp.dimension):
             acc = pp.generator ** self._zr(0)
@@ -245,13 +243,13 @@ class ThresholdMCFE:
             numerator.append(acc)
         denominator_client = tuple(
             tuple(
-                ordered[i].ct1[z] ** self._zr(key.v1[i][z] * lagrange)
+                ordered[i].ct1[z] ** self._zr(key.v1[i][z])
                 for z in range(pp.dimension)
             )
             for i in range(pp.clients)
         )
         denominator_round = tuple(
-            pp.generator ** self._zr(key.v0[z] * lagrange) for z in range(pp.dimension)
+            pp.generator ** self._zr(key.v0[z]) for z in range(pp.dimension)
         )
         return PartialShare(
             key.aggregator_id,
@@ -277,8 +275,8 @@ class ThresholdMCFE:
             raise TMCFEError("duplicate aggregator share")
         if len(shares) < first.threshold:
             raise TMCFEError("insufficient partial shares")
-        if set(signer_ids) != set(committee):
-            raise TMCFEError("all shares from the frozen committee are required")
+        if not set(signer_ids).issubset(set(committee)):
+            raise TMCFEError("share signer is not a member of the frozen committee")
         if any(
             share.round_id != round_id
             or share.committee != committee
@@ -297,12 +295,22 @@ class ThresholdMCFE:
         table = self._dlog_table(dlog_bound)
         decoded: list[int] = []
         identity = pp.generator ** self._zr(0)
+        lagrange = {
+            share.aggregator_id: self._lagrange_at_zero(
+                share.aggregator_id, tuple(sorted(signer_ids))
+            )
+            for share in shares
+        }
         for z in range(pp.dimension):
             denominator = pp.generator ** self._zr(0)
             for share in shares:
                 for client_terms in share.denominator_client:
-                    denominator *= client_terms[z]
-                denominator *= share.denominator_round[z]
+                    denominator *= client_terms[z] ** self._zr(
+                        lagrange[share.aggregator_id]
+                    )
+                denominator *= share.denominator_round[z] ** self._zr(
+                    lagrange[share.aggregator_id]
+                )
             element = first.numerator[z] / denominator
             exponent = 0 if element == identity else table.get(pp.group.serialize(element))
             if exponent is None:

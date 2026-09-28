@@ -9,6 +9,17 @@ description = "Reproduction of CrosFed threshold cross-chain federated learning"
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "PyYAML>=6"]
 
+[project.scripts]
+crosfed-train = "crosfed.cli.train:main"
+crosfed-sweep = "crosfed.cli.sweep:main"
+crosfed-summarize = "crosfed.cli.summarize:main"
+crosfed-security = "crosfed.cli.adversarial:main"
+crosfed-crypto-sanity = "crosfed.cli.crypto_sanity:main"
+crosfed-chainmaker-config = "crosfed.cli.chainmaker_config:main"
+crosfed-chainmaker-bridge = "crosfed.cli.chainmaker_bridge:main"
+crosfed-chainmaker-e2e = "crosfed.cli.chainmaker_e2e:main"
+crosfed-contract-bench = "crosfed.cli.contract_microbench:main"
+
 [project.optional-dependencies]
 ml = ["torch>=2.0", "torchvision>=0.15"]
 test = ["pytest>=8"]
@@ -19,4 +30,3 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
-

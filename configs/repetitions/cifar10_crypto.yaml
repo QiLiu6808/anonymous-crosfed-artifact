@@ -1,0 +1,4 @@
+base_config: configs/paper/cifar10_crypto_5c_3a_100r.yaml
+sweep_name: R033_cifar10_crypto_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

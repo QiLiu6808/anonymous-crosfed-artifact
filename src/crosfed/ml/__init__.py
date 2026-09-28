@@ -10,6 +10,7 @@ from .federated import (
     train_local,
 )
 from .parameters import ModelVectorSpec, TensorSpec, flatten_state_dict, unflatten_state_dict
+from .data_integrity import dataset_content_manifest
 
 __all__ = [
     "PaperMNISTCNNCandidate",
@@ -25,4 +26,5 @@ __all__ = [
     "TensorSpec",
     "flatten_state_dict",
     "unflatten_state_dict",
+    "dataset_content_manifest",
 ]

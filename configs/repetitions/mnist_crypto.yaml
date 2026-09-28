@@ -1,0 +1,4 @@
+base_config: configs/paper/mnist_crypto_5c_3a_30r.yaml
+sweep_name: R031_mnist_crypto_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

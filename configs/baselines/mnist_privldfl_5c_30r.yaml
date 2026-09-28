@@ -1,6 +1,7 @@
 run_id: R010b_mnist_privldfl_5c_30r_candidate_b
 seed: 20260922
 mode: privldfl
+allow_reconstructed_baseline: true
 dataset: mnist
 data_dir: data
 model: paper_candidate

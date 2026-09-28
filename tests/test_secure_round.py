@@ -22,9 +22,10 @@ def test_secure_round_matches_integer_oracle() -> None:
         ],
         [1, 3],
         round_id=1,
-        committee=[1, 3],
         dlog_bound=2_000,
     )
     assert result.exact_oracle_match
     assert result.phase == RoundPhase.GLOBAL_DECRYPTED
     assert torch.allclose(result.global_state["weight"], torch.tensor([2.5, 1.0]))
+    assert result.round_context.committee == (1, 2, 3)
+    assert len(result.aggregator_wire_bytes_by_id) == 3

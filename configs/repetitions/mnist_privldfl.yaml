@@ -1,0 +1,4 @@
+base_config: configs/baselines/mnist_privldfl_5c_30r.yaml
+sweep_name: R035_mnist_privldfl_repetitions
+parameters:
+  seed: [20260922, 20260923, 20260924]

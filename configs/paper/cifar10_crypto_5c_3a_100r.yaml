@@ -7,7 +7,7 @@ model: paper_candidate
 clients: 5
 aggregators: 3
 threshold: 2
-committee: [1, 2]
+committee: [1, 2, 3]
 rounds: 100
 local_epochs: 1
 batch_size: 128

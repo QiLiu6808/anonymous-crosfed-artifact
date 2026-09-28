@@ -31,6 +31,25 @@ def test_adjacent_committee_ids_interpolate_correctly(fixture_data) -> None:
     assert scheme.combine(shares, 7, 64) == expected
 
 
+@pytest.mark.parametrize("selected", [(1, 2), (1, 3), (2, 3), (1, 2, 3)])
+def test_any_threshold_subset_of_frozen_committee_recovers(
+    fixture_data, selected: tuple[int, ...]
+) -> None:
+    scheme, vectors, weights, keys, ciphertexts, _ = fixture_data
+    published = {
+        aggregator_id: scheme.share_decrypt(
+            ciphertexts, weights, keys[aggregator_id], [1, 2, 3], 7
+        )
+        for aggregator_id in [1, 2, 3]
+    }
+    shares = [published[aggregator_id] for aggregator_id in selected]
+    expected = [
+        sum(vectors[i][z] * weights[i][z] for i in range(3))
+        for z in range(3)
+    ]
+    assert scheme.combine(shares, 7, 64) == expected
+
+
 def test_rejects_insufficient_replayed_and_tampered_shares(fixture_data) -> None:
     scheme, _, weights, keys, ciphertexts, shares = fixture_data
     with pytest.raises(TMCFEError, match="insufficient"):
